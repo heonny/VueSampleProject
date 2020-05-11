@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainPage from "../components/MainPage";
-import About from "../components/About";
+import about from "../components/About";
 
 Vue.use(VueRouter)
 
@@ -15,8 +15,8 @@ const router = new VueRouter({
     },
     {
       path: '/about',
-      name: 'About',
-      component: About
+      name: 'about',
+      component: about
     }
   ]
 })

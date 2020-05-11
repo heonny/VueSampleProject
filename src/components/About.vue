@@ -1,4 +1,3 @@
-<!-- to-do-frontend/src/components/About.vue -->
 <template>
   <div class="about">
     {{msg}}
@@ -10,7 +9,7 @@
     name: 'about',
     data: () => {
       return {
-        msg: '내가 개발한 To Do 어플입니다.'
+        msg: 'About Page!'
       }
     }
   }
