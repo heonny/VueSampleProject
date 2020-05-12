@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <img alt="Rapod logo" src="./assets/ra-logo.png" width="25%">
     <router-view></router-view>
   </div>
 </template>

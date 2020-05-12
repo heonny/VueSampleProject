@@ -10,7 +10,8 @@
         <b-container fluid>
           <b-row class="my-1">
             <b-col sm="10">
-              <b-form-file v-model="file" id="file" ref="file" type="file" v-on:change="handleFileUpload()"/>
+              <b-form-file v-model="files" id="files" ref="files" type="file" multiple
+                           v-on:change="handleFileUpload()"/>
             </b-col>
             <b-col sm="2">
               <b-button variant="outline-primary" v-on:click="submitFile()">Submit!</b-button>
@@ -18,92 +19,109 @@
           </b-row>
         </b-container>
       </b-form-group>
-<!--      <b-list-group v-if="fileList && fileList.length">-->
-<!--        <b-list-group-item-->
-<!--          v-for="fileItem of fileList"-->
-<!--          v-bind:data="fileItem.fileName"-->
-<!--          v-bind:key="fileItem.fileNameKey">-->
-<!--        </b-list-group-item>-->
-<!--      </b-list-group>-->
+      Current File List
+      <b-list-group v-if="fileList && fileList.length">
+        <b-list-group-item
+            v-for="fileItem of fileList"
+            v-bind:data="fileItem.fileName"
+            v-bind:key="fileItem.fileNameKey">
+          {{fileItem.fileName}}
+          <b-button class="float-right" variant="outline-danger" v-on:click="deleteFile(fileItem)">
+            Delete!
+          </b-button>
+        </b-list-group-item>
+      </b-list-group>
     </b-card>
-<!--    <div class="large-12 medium-12 small-12 cell">-->
-<!--      <strong>File Upload</strong>-->
-<!--      <hr>-->
-<!--      <label>One File Upload<input type="file" id="file" ref="file"-->
-<!--                                   v-on:change="handleFileUpload()"></label>-->
-<!--      <button v-on:click="submitFile()">Submit</button>-->
-<!--      <hr>-->
-<!--      {{imageFile}}-->
-<!--      <hr>-->
-
-<!--    </div>-->
-    <strong>File List</strong>
-    <hr>
-    <ul v-if="fileList && fileList.length">
-      <li v-for="fileEl of fileList">
-        {{fileEl.fileNameKey}}
-        <hr>
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
   export default {
+    // vue.js의 Component 는 name, data, methods, created(init method)로 구성
+    // name : 해당 vue Component 를 구별하는 이름
     name: "MainPage",
+    // data : 이 Component(this)에 생성될 데이터들
     data: () => {
       return {
         fileList: [],
-        file: ''
+        files: []
       }
     },
     created() {
-      this.$http.get('/api/getAllFiles').then(
-          response => {
-            this.fileList = response.data
-          }
-      ).catch(e => {
-        console.log(e)
-      })
+      this.initFunc()
     },
+    // methods : name, data 처럼 이 vue가 실행할 수 있는 method들
     methods: {
+      initFunc() {
+        let vm = this
+        vm.$http.get('/api/getAllFiles').then(
+            response => {
+              vm.fileList = response.data
+            }
+        ).catch(error => {
+          console.log('Fail' + error)
+        })
+      },
       handleFileUpload() {
-        this.file = this.$refs.file.files[0]
+        let vm = this
+        vm.files = vm.$refs.files.files[0]
       },
       submitFile() {
         let formData = new FormData()
-        formData.append('file', this.file)
+        let vm = this
+        for (let i = 0; i < vm.files.length; i++) {
+          let file = vm.files[i]
+          // formData.append('files[' + i + ']', file)  // if need list
+          formData.append('files', file)
+          console.log('files[' + i + ']', file)
+        }
+        // formData.append('file', vm.file)
 
-        this.$http.post('/api/uploadFile', formData, {
+        if (!formData.has('files')) {
+          console.log('No File Check')
+          return
+        }
+
+        vm.$http.post('/api/uploadMultipleFiles', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         }).then(function () {
           console.log('Success')
-        }).catch(function () {
-          console.log('Fail')
+
+          vm.initFunc()
+          vm.file = ""
+        }).catch(function (e) {
+          console.log('Fail' + e)
         })
+      },
+      deleteFile(fileItem) {
+        console.log("Delete File Button Clicked")
+        if (!fileItem) {
+          console.log('Can not Detect File Item')
+          return
+        }
+        let vm = this
+
+        let reqData = {
+          "fileNameKey": fileItem.fileNameKey
+        }
+
+        vm.$http.post('/api/fileDelete', reqData).then(
+            response => {
+              vm.initFunc()
+              console.log(response.data)
+            }
+        ).catch(
+            error => {
+              console.log(error)
+            }
+        )
       }
     }
   }
 </script>
 
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
 
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #35495E;
-  }
 </style>
