@@ -1,13 +1,13 @@
 <template>
   <div class="MainPage">
     <b-card
-        header="File Upload"
-        style="max-width: 40rem; margin: auto; margin-top: 10vh;"
+        header="File Form"
+        style="max-width: 40rem; margin: 10vh auto auto;"
         class="mb-2"
         border-variant="info"
         align="left">
       <b-form-group id="file-input">
-        <b-container fluid>
+        <b-container>
           <b-row class="my-1">
             <b-col sm="10">
               <b-form-file v-model="files" id="files" ref="files" type="file" multiple
@@ -19,15 +19,29 @@
           </b-row>
         </b-container>
       </b-form-group>
-      Current File List
+
+      <b-img :src="fileRaw" width="100%"></b-img>
       <b-list-group v-if="fileList && fileList.length">
+        <div class="list-header">
+          <span>Current File List</span>
+          <span class="float-right">Number of files : {{fileList.length}}</span>
+        </div>
         <b-list-group-item
             v-for="fileItem of fileList"
             v-bind:data="fileItem.fileName"
             v-bind:key="fileItem.fileNameKey">
+          <b-icon-music-note-beamed
+              v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
+          <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
+          <b-icon-file-earmark v-else></b-icon-file-earmark>
           {{fileItem.fileName}}
-          <b-button class="float-right" variant="outline-danger" v-on:click="deleteFile(fileItem)">
-            Delete!
+          <b-button class="float-right" variant="outline-danger"
+                    v-on:click="deleteFile(fileItem)">
+            Delete
+          </b-button>
+          <b-button class="float-right" variant="outline-primary" style="margin-right: 5px;"
+                    v-on:click="downloadFile(fileItem)">
+            Download
           </b-button>
         </b-list-group-item>
       </b-list-group>
@@ -44,7 +58,8 @@
     data: () => {
       return {
         fileList: [],
-        files: []
+        files: [],
+        fileRaw: ""
       }
     },
     created() {
@@ -57,6 +72,7 @@
         vm.$http.get('/api/getAllFiles').then(
             response => {
               vm.fileList = response.data
+              vm.files = null
             }
         ).catch(error => {
           console.log('Fail' + error)
@@ -64,7 +80,39 @@
       },
       handleFileUpload() {
         let vm = this
-        vm.files = vm.$refs.files.files[0]
+        vm.files = vm.$refs.files.files
+      },
+      downloadFile(fileItem) {
+        console.log("Download File Button Clicked")
+        if (!fileItem) {
+          console.log('Can not Detect File Item')
+          return
+        }
+        let vm = this
+
+        let reqData = fileItem.fileNameKey
+
+        // let config = {
+        //   url: '/api/downloadFile/' + reqData,
+        //   responseType: 'blob'
+        // }
+
+        vm.$http.get('/api/downloadFile/' + reqData, { responseType: 'blob'}).then(function (response) {
+          console.log(response.headers['content-type'])
+          if (response.headers['content-type'].includes('image')) {
+            let reader = new FileReader()
+            // let blob = new Blob([response.data], {type: response.headers['content-type']})
+            // console.log(blob)
+            reader.readAsDataURL(response.data)
+            reader.onload = () => {
+              console.log(reader.result)
+              vm.fileRaw = reader.result
+            }
+          }
+          console.log('success!' + response)
+        }).catch(function (response) {
+          console.log(response)
+        })
       },
       submitFile() {
         let formData = new FormData()
@@ -123,5 +171,12 @@
 </script>
 
 <style scoped>
+  .list-header {
+    margin-left: 0;
+    display: block;
+    font-size: .875rem;
+    color: #6c757d;
+    white-space: nowrap;
+  }
 
 </style>
