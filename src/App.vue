@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Rapod logo" src="./assets/ra-logo.png" width="25%">
+<!--    <img alt="Rapod logo" src="./assets/ra-logo.png" width="25%">-->
     <router-view></router-view>
   </div>
 </template>
@@ -18,6 +18,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    margin-top: 0;
   }
 </style>

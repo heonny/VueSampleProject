@@ -1,11 +1,11 @@
 <template>
-  <div class="MainPage">
+  <div>
     <b-card
         header="File Form"
         style="max-width: 40rem; margin: 10vh auto auto;"
         class="mb-2"
         border-variant="info"
-        align="left">
+        align="left" v-bind:style="backImg">
       <b-form-group id="file-input">
         <b-container>
           <b-row class="my-1">
@@ -20,7 +20,7 @@
         </b-container>
       </b-form-group>
 
-      <b-img :src="fileRaw" width="100%"></b-img>
+      <b-img :src="imgRaw" width="100%"></b-img>
       <b-list-group v-if="fileList && fileList.length">
         <div class="list-header">
           <span>Current File List</span>
@@ -29,7 +29,7 @@
         <b-list-group-item
             v-for="fileItem of fileList"
             v-bind:data="fileItem.fileName"
-            v-bind:key="fileItem.fileNameKey">
+            v-bind:key="fileItem.fileNameKey" :class="backTrans">
           <b-icon-music-note-beamed
               v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
           <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
@@ -41,7 +41,7 @@
           </b-button>
           <b-button class="float-right" variant="outline-primary" style="margin-right: 5px;"
                     v-on:click="downloadFile(fileItem)">
-            Download
+            View
           </b-button>
         </b-list-group-item>
       </b-list-group>
@@ -52,20 +52,34 @@
 <script>
   export default {
     // vue.js의 Component 는 name, data, methods, created(init method)로 구성
-    // name : 해당 vue Component 를 구별하는 이름
+    // name : 해당 vue Component 를 구별
     name: "MainPage",
-    // data : 이 Component(this)에 생성될 데이터들
+    // data : 이 Component(this)에 생성될 데이터
     data: () => {
       return {
         fileList: [],
         files: [],
-        fileRaw: ""
+        imgRaw: "",
+        backToggle: true
       }
     },
     created() {
       this.initFunc()
     },
-    // methods : name, data 처럼 이 vue가 실행할 수 있는 method들
+    computed: {
+      backTrans: function () {
+        return {
+          backT000: this.backToggle,
+          backT008: !this.backToggle
+        }
+      },
+      backImg: function () {
+        return {
+          'background-image': 'url(' + this.imgRaw + ')'
+        }
+      }
+    },
+    // methods : name, data 와 같은 실행할 수 있는 method
     methods: {
       initFunc() {
         let vm = this
@@ -92,25 +106,22 @@
 
         let reqData = fileItem.fileNameKey
 
-        // let config = {
-        //   url: '/api/downloadFile/' + reqData,
-        //   responseType: 'blob'
-        // }
-
-        vm.$http.get('/api/downloadFile/' + reqData, { responseType: 'blob'}).then(function (response) {
-          console.log(response.headers['content-type'])
-          if (response.headers['content-type'].includes('image')) {
-            let reader = new FileReader()
-            // let blob = new Blob([response.data], {type: response.headers['content-type']})
-            // console.log(blob)
-            reader.readAsDataURL(response.data)
-            reader.onload = () => {
-              console.log(reader.result)
-              vm.fileRaw = reader.result
-            }
-          }
-          console.log('success!' + response)
-        }).catch(function (response) {
+        vm.$http.get('/api/downloadFile/' + reqData, {responseType: 'blob'}).then(
+            function (response) {
+              console.log(response.headers['content-type'])
+              if (response.headers['content-type'].includes('image')) {
+                let reader = new FileReader()
+                reader.readAsDataURL(response.data)
+                reader.onload = () => {
+                  vm.imgRaw = reader.result
+                }
+                vm.backToggle = false
+              } else {
+                vm.imgRaw = null
+                vm.backToggle = true
+              }
+              console.log('success!' + response)
+            }).catch(function (response) {
           console.log(response)
         })
       },
@@ -177,6 +188,14 @@
     font-size: .875rem;
     color: #6c757d;
     white-space: nowrap;
+  }
+
+  .backT008 {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .backT000 {
+    background-color: rgba(0, 0, 0, 0);
   }
 
 </style>
