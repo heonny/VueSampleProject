@@ -6,55 +6,20 @@
         class="mb-2"
         border-variant="info"
         align="left" v-bind:style="backImg">
-      <b-form-group id="file-input">
-        <b-container>
-          <b-row class="my-1">
-            <b-col sm="10">
-              <b-form-file v-model="files" id="files" ref="files" type="file" multiple
-                           v-on:change="handleFileUpload()"/>
-            </b-col>
-            <b-col sm="2">
-              <b-button variant="outline-primary" v-on:click="submitFile()">Submit!</b-button>
-            </b-col>
-          </b-row>
-        </b-container>
-      </b-form-group>
-
-      <b-img v-if="imgRaw" :src="imgRaw" width="100%"></b-img>
-      <p v-else>{{this.curFile}}</p>
-      <b-list-group v-if="fileList && fileList.length">
-        <div class="list-header">
-          <span>Current File List</span>
-          <span class="float-right">Number of files : {{fileList.length}}</span>
-        </div>
-        <b-list-group-item
-            v-for="fileItem of fileList"
-            v-bind:data="fileItem.fileName"
-            v-bind:key="fileItem.fileNameKey" :class="backTrans">
-          <b-icon-music-note-beamed
-              v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
-          <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
-          <b-icon-file-earmark v-else></b-icon-file-earmark>
-          {{fileItem.fileName}}
-          <b-button class="float-right" variant="outline-danger"
-                    v-on:click="deleteFile(fileItem)">
-            Delete
-          </b-button>
-          <b-button class="float-right" variant="outline-primary" style="margin-right: 5px;"
-                    v-on:click="downloadFile(fileItem)">
-            View
-          </b-button>
-        </b-list-group-item>
-      </b-list-group>
+      <file-upload></file-upload>
+      <file-list></file-list>
     </b-card>
   </div>
 </template>
 
 <script>
+  import FileUpload from "./FileUpload";
+  import FileList from "./FileList";
+
   export default {
     // vue.js의 Component 는 name, data, methods, created(init method)로 구성
     // name : 해당 vue Component 를 구별
-    name: "MainPage",
+    name: "FileController",
     // data : 이 Component(this)에 생성될 데이터
     data: () => {
       return {
@@ -192,6 +157,10 @@
         console.log(result)
         return result
       }
+    },
+    components: {
+      'file-upload': FileUpload,
+      'file-list': FileList
     }
   }
 </script>

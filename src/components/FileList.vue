@@ -1,19 +1,27 @@
 <template>
+<!--  <b-img v-if="imgRaw" :src="imgRaw" width="100%"></b-img>-->
+<!--  <p v-else>{{this.curFile}}</p>-->
   <b-list-group v-if="fileList && fileList.length">
+    <div class="list-header">
+      <span>Current File List</span>
+      <span class="float-right">Number of files : {{fileList.length}}</span>
+    </div>
     <b-list-group-item
         v-for="fileItem of fileList"
         v-bind:data="fileItem.fileName"
-        v-bind:key="fileItem.fileNameKey">
-      <b-icon-music-note-beamed v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
+        v-bind:key="fileItem.fileNameKey" :class="backTrans">
+      <b-icon-music-note-beamed
+          v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
       <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
       <b-icon-file-earmark v-else></b-icon-file-earmark>
       {{fileItem.fileName}}
-      <b-button class="float-right" variant="outline-danger" v-on:click="deleteFile(fileItem)">
+      <b-button class="float-right" variant="outline-danger"
+                v-on:click="deleteFile(fileItem)">
         Delete
       </b-button>
       <b-button class="float-right" variant="outline-primary" style="margin-right: 5px;"
                 v-on:click="downloadFile(fileItem)">
-        Download
+        View
       </b-button>
     </b-list-group-item>
   </b-list-group>
@@ -26,11 +34,21 @@
     data: () => {
       return {
         fileList: [],
-        files: []
+        files: [],
+        curFile: null,
+        imgRaw: null
       }
     },
     created() {
       this.initFunc()
+    },
+    computed: {
+      backTrans: function () {
+        return {
+          backT000: this.backToggle,
+          backT008: !this.backToggle
+        }
+      }
     },
     methods: {
       initFunc() {
