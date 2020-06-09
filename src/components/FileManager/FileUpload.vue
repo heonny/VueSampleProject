@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import FileList from "./FileList";
+  // import FileList from "./FileList";
 
   export default {
     name: "FileUpload",
@@ -29,12 +29,10 @@
     methods: {
       initFunc() {
         let vm = this
-        let fl = FileList
-        console.log('init?')
         vm.$http.get('/api/getAllFiles').then(
             response => {
-              fl.fileList = response.data
-              console.z
+              vm.fileList = response.data
+              vm.files = null
             }
         ).catch(error => {
           console.log('Fail' + error)
@@ -42,7 +40,7 @@
       },
       handleFileUpload() {
         let vm = this
-        vm.files = vm.$refs.files.files[0]
+        vm.files = vm.$refs.files.files
       },
       submitFile() {
         let formData = new FormData()
@@ -69,7 +67,7 @@
 
           vm.initFunc()
           vm.file = ""
-          console.log('Do init')
+          this.$emit('submit_success', "Success")
         }).catch(function (e) {
           console.log('Fail' + e)
         })

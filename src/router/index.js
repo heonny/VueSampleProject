@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import main from "../components/MainPage";
 import about from "../components/About";
-import FileController from "../components/FileController";
+import FileController from "../components/FileManager/FileController";
+import UserPage from "../components/User/UserPage";
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ const router = new VueRouter({
       path: '/file',
       name: 'file',
       component: FileController
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: UserPage
     }
   ]
 })

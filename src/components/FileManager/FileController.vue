@@ -25,8 +25,6 @@
       return {
         fileList: [],
         files: [],
-        curFile: null,
-        imgRaw: null,
         backToggle: true
       }
     },
