@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Rapod logo" src="./assets/ra-logo.png" width="10%">
+    <img alt="Rapod logo" src="./assets/ra-logo.png" width="10%" v-on:click="Redirect">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'App'
+    name: 'App',
+    methods: {
+      Redirect() {
+        this.$router.push('/')
+      }
+    }
   }
 </script>
 

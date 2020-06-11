@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container>
     <b-card
         header="File Form"
         style="max-width: 40rem; margin: 30px auto auto;"
@@ -7,17 +7,15 @@
         border-variant="info"
         align="left" v-bind:style="backImg">
       <b-form-group id="file-input">
-        <b-container>
-          <b-row class="my-1">
-            <b-col sm="10">
-              <b-form-file v-model="files" id="files" ref="files" type="file" multiple
-                           v-on:change="handleFileUpload()"/>
-            </b-col>
-            <b-col sm="2">
-              <b-button variant="outline-primary" v-on:click="submitFile()">Submit!</b-button>
-            </b-col>
-          </b-row>
-        </b-container>
+        <b-row>
+          <b-col cols="9">
+            <b-form-file v-model="files" id="files" ref="files" type="file" multiple
+                         v-on:change="handleFileUpload()"/>
+          </b-col>
+          <b-col class="btnSm" cols="3">
+            <b-button variant="outline-primary" v-on:click="submitFile()">Submit!</b-button>
+          </b-col>
+        </b-row>
       </b-form-group>
 
       <b-img v-if="imgRaw" :src="imgRaw" width="100%"></b-img>
@@ -31,23 +29,29 @@
             v-for="fileItem of fileList"
             v-bind:data="fileItem.fileName"
             v-bind:key="fileItem.fileNameKey" :class="backTrans">
-          <b-icon-music-note-beamed
-              v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
-          <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
-          <b-icon-file-earmark v-else></b-icon-file-earmark>
-          {{fileItem.fileName}}
-          <b-button class="float-right" variant="outline-danger"
-                    v-on:click="deleteFile(fileItem)">
-            Delete
-          </b-button>
-          <b-button class="float-right" variant="outline-primary" style="margin-right: 5px;"
-                    v-on:click="downloadFile(fileItem)">
-            View
-          </b-button>
+          <b-row>
+            <b-col class="align-self-center" cols="8">
+              <b-icon-music-note-beamed
+                  v-if="fileItem.mimeType.includes('audio')"></b-icon-music-note-beamed>
+              <b-icon-card-image v-else-if="fileItem.mimeType.includes('image')"></b-icon-card-image>
+              <b-icon-file-earmark v-else></b-icon-file-earmark>
+              {{fileItem.fileName}}
+            </b-col>
+            <b-col class="btnCol" cols="2">
+              <b-button class="float-right" variant="outline-danger"
+                        v-on:click="deleteFile(fileItem)">Del
+              </b-button>
+            </b-col>
+            <b-col class="btnCol" cols="2">
+              <b-button class="float-right" variant="outline-primary"
+                        v-on:click="downloadFile(fileItem)">View
+              </b-button>
+            </b-col>
+          </b-row>
         </b-list-group-item>
       </b-list-group>
     </b-card>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -197,6 +201,19 @@
 </script>
 
 <style scoped>
+  button {
+    width: 100%;
+  }
+
+  .btnSm {
+    padding-left: 0;
+  }
+
+  .btnCol {
+    padding-left: 10px;
+    padding-right: 0;
+  }
+
   .list-header {
     margin-left: 0;
     display: block;

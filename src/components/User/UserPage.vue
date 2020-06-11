@@ -1,8 +1,7 @@
 <template>
-  <div class="container">
-    user page
+  <b-container>
     <login></login>
-  </div>
+  </b-container>
 </template>
 
 <script>

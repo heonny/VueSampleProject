@@ -1,23 +1,21 @@
 <template>
-  <div>
+  <b-container>
     <h2>Log In</h2>
     <b-form @submit="onSubmit">
-      <b-table-simple>
-        <b-tr >
-          <b-td>
-            <b-input placeholder="Email" v-model="email"></b-input>
-            <b-input placeholder="Password" v-model="userPw"></b-input>
-          </b-td>
-          <b-td colspan="2">
-            <b-button type="submit" class="btn-dark">Login</b-button>
-          </b-td>
-        </b-tr>
-      </b-table-simple>
-      <div class="mt-1">
-        <b-button type="join" class="mr-1 btn-danger">Join</b-button>
+      <div class="pb-1">
+        <b-input placeholder="Email" v-model="email"></b-input>
+      </div>
+      <div class="pb-1">
+        <b-input placeholder="Password" v-model="userPw"></b-input>
+      </div>
+      <div class="pb-1">
+        <b-button type="submit" class="btn-dark">Login</b-button>
+      </div>
+      <div class="pb-1">
+        <b-button type="join" class="btn-outline-dark">Join</b-button>
       </div>
     </b-form>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -37,5 +35,7 @@
 </script>
 
 <style scoped>
-
+  button {
+    width: 100%;
+  }
 </style>
