@@ -1,24 +1,17 @@
 <template>
     <div>
         <h1>header</h1>
-        <b-input-group
-            v-for="size in headerData"
-            :key="size"
-            :size="size"
-            class="mb-3"
-            prepend="Header"
-        >
-            <b-form-input>{{headerData.header01}}</b-form-input>
-            <b-input-group-append>
-                <b-button size="sm" text="Button" variant="success">Button</b-button>
-            </b-input-group-append>
-        </b-input-group>
+        <b-form-input>{{headerData}}</b-form-input>
+        <b-input-group-append>
+            <b-button size="sm" text="Button" variant="success">Button</b-button>
+        </b-input-group-append>
     </div>
 </template>
 <script>
 export default {
     name: 'ExampleHeader',
     data() {
+        console.log('data()')
         return {
 
         }
@@ -30,10 +23,16 @@ export default {
                 required: false
             },
             header02: {
-                type: String,
+                type: Number,
                 required: false
             }
         }
+    },
+    mounted: () => {
+        console.log('mounted')
+    },
+    created: () => {
+        console.log('created')
     }
 }
 </script>
