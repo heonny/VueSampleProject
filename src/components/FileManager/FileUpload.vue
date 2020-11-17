@@ -67,7 +67,7 @@
 
           vm.initFunc()
           vm.file = ""
-          this.$emit('submit_success', "Success")
+          this.$emit('submitMessage', "Success")
         }).catch(function (e) {
           console.log('Fail' + e)
         })

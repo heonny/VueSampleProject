@@ -50,6 +50,9 @@
         }
       }
     },
+    props: {
+      submitMessage: {}
+    },
     // methods : name, data 와 같은 실행할 수 있는 method
     methods: {
       initFunc() {
