@@ -12,6 +12,6 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
 new Vue({
-  render: h => h(App),
-  router
+    render: h => h(App),
+    router
 }).$mount('#app')

@@ -28,13 +28,11 @@ export default {
             }
         }
     },
-    methods: {
-        
-    },
+    methods: {},
     components: {
         eHeader,
         eContent,
-        eFooter        
+        eFooter
     }
 }
 </script>

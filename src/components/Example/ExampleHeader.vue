@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>header</h1>
-        <b-form-input>{{headerData}}</b-form-input>
+        <b-form-input>{{ headerData }}</b-form-input>
         <b-input-group-append>
             <b-button size="sm" text="Button" variant="success">Button</b-button>
         </b-input-group-append>
@@ -12,9 +12,7 @@ export default {
     name: 'ExampleHeader',
     data() {
         console.log('data()')
-        return {
-
-        }
+        return {}
     },
     props: {
         headerData: {

@@ -7,9 +7,7 @@
 export default {
     name: 'ExampleFooter',
     data() {
-        return {
-
-        }
+        return {}
     },
     props: {
         footerData: {

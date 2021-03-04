@@ -7,9 +7,7 @@
 export default {
     name: 'ExampleContent',
     data() {
-        return {
-
-        }
+        return {}
     },
     props: {
         contentData: {

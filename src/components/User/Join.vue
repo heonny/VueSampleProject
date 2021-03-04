@@ -1,11 +1,11 @@
 <template>
-  <div>join page</div>
+    <div>join page</div>
 </template>
 
 <script>
-  export default {
+export default {
     name: "Join"
-  }
+}
 </script>
 
 <style scoped>

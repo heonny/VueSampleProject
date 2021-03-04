@@ -1,16 +1,16 @@
 <template>
-  <b-container>
-    <login></login>
-  </b-container>
+    <b-container>
+        <login></login>
+    </b-container>
 </template>
 
 <script>
-  import Login from "./Login";
+import Login from "./Login";
 
-  export default {
+export default {
     name: "UserPage",
     components: {Login}
-  }
+}
 </script>
 
 <style scoped>
