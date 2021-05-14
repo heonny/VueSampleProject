@@ -41,11 +41,12 @@ export default {
 
             let vm = this
             let param = {
-                "email": vm.email,
-                "userPw": vm.userPw
+                "loginId": vm.email,
+                "pwd": vm.userPw
             }
-            vm.$http.post('/api/goLogin/', param).then(function () {
-                console.log('Login Success')
+            vm.$http.post('http://localhost:9090/api/signIn', param).then(function (data) {
+                console.log('Connection Success')
+                alert(data.data.msg)
             }).catch(function (e) {
                 console.log('Fail : ' + e)
             })
